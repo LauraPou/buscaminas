@@ -47,26 +47,25 @@ public class Buscaminas {
             }
         }
         // posicionar las minas en coordenadas aleatorias
-        for (int i = 0; i < minas; i++) {
-            x = ThreadLocalRandom.current().nextInt(0, n);
-            y = ThreadLocalRandom.current().nextInt(0, m);
-            for (int j = 0; j < minas; j++) {
-                matriz[x][y] = -1;
-                if(x>0 && y>0 && x<n-1 && y<m-1){
-                    matriz[x-1][y-1] += 1;
-                    matriz[x-1][y] += 1;
-                    matriz[x-1][y+1] += 1;
-                    matriz[x][y-1] += 1;
-                    matriz[x][y+1] += 1;
-                    matriz[x+1][y-1] += 1;
-                    matriz[x+1][y] += 1;
-                    matriz[x+1][y+1] += 1; 
+        
             
+            for (int l = 0; l < minas; l++) {
+                x = ThreadLocalRandom.current().nextInt(0, n);
+                y = ThreadLocalRandom.current().nextInt(0, m);
+                if(matriz[x][y]!=8){matriz[x][y] = 8;}
+                for (int i = -1; i < 1; i++) {
+                    for (int j = -1; j < 1; j++) {
+                        if((x+i)>=0 && (y+j)>=0 && (x+i)<n && (y+j)<m && matriz[x+i][x+j]!=8){
+                            matriz[x+i][y+j] += 1;
+                        }
+                    }
+                    
                 }
                 
+                              
                 
             }
-        }
+        
 
 
         return matriz;
