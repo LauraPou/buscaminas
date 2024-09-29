@@ -9,13 +9,14 @@ public class Buscaminas {
         // Nivel principiante: tablero de 9 × 9 casillas y 10 minas. 
         System.out.println("Ingresa el nivel del juego:\n1 Principiante\n2 Intermedio\n3 Experto");
         n = entrada.nextInt();
-        int[][] matriz =generarMatriz(n);
+        char[][] matriz =generarMatriz(n);
         imprimirMatriz(matriz);
         
     }
 
 
-    public static void imprimirMatriz(int[][] matriz){
+    public static void imprimirMatriz(char[][] matriz){
+        System.out.println("-------------------------------------------\n");
         for (int i = 0; i < matriz.length; i++) {
             for (int j = 0; j < matriz.length; j++) {
                 System.out.print(matriz[i][j]+" | ");
@@ -24,8 +25,8 @@ public class Buscaminas {
         }
     }
 
-    public static int[][] generarMatriz(int nivel){
-        int minas = 0, n = 0, m = 0, x, y;
+    public static char[][] generarMatriz(int nivel){
+        int minas = 0, n = 0, m = 0, c = 0;
         if(nivel == 1){ // principiante
             minas = 10;
             n = m = 9;
@@ -39,38 +40,45 @@ public class Buscaminas {
             n = 16;
             m = 30;
         }
-        int[][] matriz = new int[n][m];
+        char[][] matriz = new char[n][m];
+
         // primero llenar con ceros la matriz
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
-                matriz[i][j] = 0;
+                matriz[i][j] = '0';
             }
         }
+        imprimirMatriz(matriz);
         // posicionar las minas en coordenadas aleatorias
-        int contadorMinas=0;
-            
-            for (int l = 0; l < minas; l++) {
-                x = ThreadLocalRandom.current().nextInt(0, n);
-                y = ThreadLocalRandom.current().nextInt(0, m);
-                if(matriz[x][y]!=8){
-                    matriz[x][y] = 8;
-                    contadorMinas++;
-                    for (int i = -1; i <= 1; i++) {
-                        for (int j = -1; j <= 1; j++) {
-                        if( x+i >= 0 &&  j+y >= 0 && x+i<9 && j+y<9 && matriz[x+i][y+j]!=8){
-                                matriz[x+i][y+j]++;
-                        }
-                        
+        int X,Y;
+        while ( c < minas) {
+            X = ThreadLocalRandom.current().nextInt(0, n);
+            Y = ThreadLocalRandom.current().nextInt(0, m);
+            if( matriz[X][Y] != 'M' ){
+                matriz[X][Y] = 'M';
+                c++;
+            }
+        }
+        imprimirMatriz(matriz);
+        int nMinas=0;
+        // poner adyacencias
+        int[] x = {-1, -1, -1, 0, 0, 0, 1, 1, 1};
+        int[] y = {-1, 0, 1, -1, 0, 1, -1, 0, 1};
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                    if(matriz[i][j] == 'M'){
+                        nMinas++;
+                        for (int k = 0; k < y.length; k++) {
+                            if( x[k]+i >= 0 &&  j+y[k] >= 0 && x[k]+i < 9 && j+y[k] < 9 && matriz[x[k]+i][y[k]+j] != 'M'){
+                                matriz[x[k]+i][y[k]+j]++;
                         }
                     }
-
                 }
-                              
-                
-            }
-        
 
-            System.out.println("minas:" + contadorMinas);
+            }
+        }
+        System.out.println("minas encontradas: "+ nMinas);
+        
         return matriz;
     }
 
