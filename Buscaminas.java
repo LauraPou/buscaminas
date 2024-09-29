@@ -18,8 +18,8 @@ public class Buscaminas {
     public static void imprimirMatriz(int[][] matriz){
         for (int i = 0; i < matriz.length; i++) {
             for (int j = 0; j < matriz.length; j++) {
-                System.out.print(matriz[i][j]+"    ");
-            }
+                System.out.print(matriz[i][j]+" | ");
+            }                                 
             System.out.println("\n");
         }
     }
@@ -47,27 +47,30 @@ public class Buscaminas {
             }
         }
         // posicionar las minas en coordenadas aleatorias
-        
+        int contadorMinas=0;
             
             for (int l = 0; l < minas; l++) {
                 x = ThreadLocalRandom.current().nextInt(0, n);
                 y = ThreadLocalRandom.current().nextInt(0, m);
-                if(matriz[x][y]!=8){matriz[x][y] = 8;}
-                for (int i = -1; i < 1; i++) {
-                    for (int j = -1; j < 1; j++) {
-                        if((x+i)>=0 && (y+j)>=0 && (x+i)<n && (y+j)<m && matriz[x+i][x+j]!=8){
-                            matriz[x+i][y+j] += 1;
+                if(matriz[x][y]!=8){
+                    matriz[x][y] = 8;
+                    contadorMinas++;
+                    for (int i = -1; i <= 1; i++) {
+                        for (int j = -1; j <= 1; j++) {
+                        if( x+i >= 0 &&  j+y >= 0 && x+i<9 && j+y<9 && matriz[x+i][y+j]!=8){
+                                matriz[x+i][y+j]++;
+                        }
+                        
                         }
                     }
-                    
+
                 }
-                
                               
                 
             }
         
 
-
+            System.out.println("minas:" + contadorMinas);
         return matriz;
     }
 
