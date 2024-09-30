@@ -2,7 +2,7 @@ import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Buscaminas {
-    public static int contadorCasillas = 0;
+    public static int contadorCasillas = 0, contadorMinas = 0;
     public static void main (String args[]){
         Scanner entrada = new Scanner(System.in);
         int nivel;
@@ -12,7 +12,7 @@ public class Buscaminas {
     }
 
     public static void iniciarJuego(int nivel){
-        int minas = 0, contadorMinas = 0, n = 0, m = 0, numCasillas = 0;
+        int minas = 0, n = 0, m = 0, numCasillas = 0;
         if(nivel == 1){ // principiante
             minas = 10;
             n = m = 9;
@@ -55,14 +55,17 @@ public class Buscaminas {
                 case 1:
                     if(contadorMinas < minas){
                         matrizCliente = ponerBandera(matrizCliente, fila, columna);
-                        contadorMinas++;
                         imprimirMatriz(matrizCliente, minas-contadorMinas);
+                        if(contadorCasillas == numCasillas && minas-contadorMinas == 0){
+                            enJuego = false;
+                            ganar = true;
+                            System.out.println("Has ganado :)");
+                        }
                     }
                     
                     break;
                 case 2:
                     matrizCliente = quitarBandera(matrizCliente, fila, columna);
-                    contadorMinas--;
                     imprimirMatriz(matrizCliente,minas-contadorMinas);
                     break;
                 case 3:
@@ -73,8 +76,8 @@ public class Buscaminas {
                         perder = true;
                         System.out.println("Has perdido :(");
                     }
-                    contadorCasillas++;
-                    if(contadorCasillas+1 == numCasillas){
+                    
+                    if(contadorCasillas == numCasillas && minas-contadorMinas == 0){
                         enJuego = false;
                         ganar = true;
                         System.out.println("Has ganado :)");
@@ -94,6 +97,7 @@ public class Buscaminas {
     public static char[][] ponerBandera(char[][] matrizCliente, int fila, int columna){
         if(matrizCliente[fila][columna]=='-'){
             matrizCliente[fila][columna] = '>';
+            contadorMinas++;
         }
         return matrizCliente;
     }
@@ -101,6 +105,7 @@ public class Buscaminas {
     public static char[][] quitarBandera(char[][] matrizCliente, int fila, int columna){
         if(matrizCliente[fila][columna]=='>'){
             matrizCliente[fila][columna] = '-';
+            contadorMinas--;
         }
         return matrizCliente;
     }
@@ -126,6 +131,7 @@ public class Buscaminas {
     public static void imprimirMatriz(char[][] matriz, int minas){
         System.out.println("-------------------------------------------\n");
         System.out.println("Minas restantes: " + minas);
+        System.out.println("Has abierto " + contadorCasillas + " casillas");
         System.out.println("-------------------------------------------\n");
         for (int i = 0; i < matriz.length; i++) {
             for (int j = 0; j < matriz.length; j++) {
