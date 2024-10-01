@@ -1,12 +1,18 @@
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
 
 public class Servidor {
     public static void main(String[] args) {
+        Socket client;
+        DataInputStream dis;
+        DataOutputStream dos;
+        String mensaje;
+        Scanner input;
         try {
-            Socket client;
-            Scanner input = new Scanner(System.in);
+            input = new Scanner(System.in);
             System.out.println("Ingrese el puerto de donde se aceptarán jugadores...");
             int port = input.nextInt();
             ServerSocket socket = new ServerSocket(port);
@@ -16,7 +22,38 @@ public class Servidor {
             System.out.println("-----------------------------------------------");
             for (;;) {
                 client = socket.accept();
-                System.out.println("Jugador conectado desde " + client.getInetAddress() + ". Puerto: " + client.getPort());
+                dis = new DataInputStream(client.getInputStream());
+                dos = new DataOutputStream(client.getOutputStream());
+                System.out.println(
+                        "Jugador conectado desde " + client.getInetAddress() + ". Puerto: " + client.getPort());
+                dos.writeUTF("----------------------------------------------------\n|  Conectado satisfactoriamente. Puedes jugar! :)  |\n|  Ingresa el nivel de dificultad:                 |\n|    1: Principiante (9 x 9. 10 minas)             |\n|    2: Intermedio (16 x 16. 40 minas)             |\n|    3: Experto (16 x 30. 99 minas)                |\n----------------------------------------------------");
+                BuscaminasObj tableroServidor = new BuscaminasObj(dis.readInt());
+                System.out.println(tableroServidor.imprimirMatriz(tableroServidor.getTablero()));
+                mensaje = dis.readUTF();
+                tableroServidor.setFilaInicial(mensaje.charAt(0) - 48);
+                tableroServidor.setColumnaInicial((int) mensaje.charAt(2) - 48);
+                tableroServidor.setTablero(tableroServidor.generarMatriz());
+                System.out.println(tableroServidor.imprimirMatriz(tableroServidor.getTablero()));
+                tableroServidor.setJuego(true);
+                tableroServidor.setTableroJug(tableroServidor.liberarCasilla(tableroServidor.getTablero(), tableroServidor.getTableroJug(), tableroServidor.getFilaInicial(), tableroServidor.getColumnaInicial()));
+                dos.writeUTF(tableroServidor.imprimirMatriz(tableroServidor.getTableroJug()));
+                do{
+                    mensaje = dis.readUTF();
+                    tableroServidor.setTableroJug(tableroServidor.accion(mensaje.charAt(0) - 48, mensaje.charAt(2) - 48, mensaje.charAt(4) - 48));
+                    dos.writeUTF(tableroServidor.imprimirMatriz(tableroServidor.getTableroJug()));
+                    dos.writeBoolean(tableroServidor.isJuego());
+                } while(tableroServidor.isJuego());
+                if(tableroServidor.isGanar()){
+                    System.out.println("El jugador ganó");
+                    dos.writeUTF("Has ganado! :)");
+                } else {
+                    System.out.println("El jugador perdió");
+                    dos.writeUTF("Has perdido! :(");
+                }
+                System.out.println("Jugador desconectado...");
+                dis.close();
+                dos.close();
+                client.close();
             }
         } catch (Exception e) {
             e.printStackTrace();
