@@ -120,6 +120,7 @@ public class BuscaminasObj {
             if(matrizAux[fila][columna] == 'M'){
                 setJuego(false);
                 setGanar(false);
+                matrizAux = getTablero();
             }
             if(getContadorCasillas() == getNumCasillas() && getMinas() == getContadorMinas()){
                 setGanar(true);
@@ -213,7 +214,7 @@ public class BuscaminasObj {
         String cadena = "";
         cadena = cadena + "-------------------------------------------\n";
         cadena = cadena + "Minas restantes: " + (getMinas() - getContadorMinas()) + "\n";
-        cadena = cadena + "Has abierto " + getContadorCasillas() + " casillas ";
+        cadena = cadena + "Has abierto " + getContadorCasillas() + " casillas\n";
         cadena = cadena + "-------------------------------------------\n";
         for (int i = 0; i < matriz.length; i++) {
             for (int j = 0; j < matriz.length; j++) {

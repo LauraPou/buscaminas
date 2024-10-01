@@ -5,8 +5,8 @@ import java.util.Scanner;
 
 public class Cliente {
     public static void main(String[] args) {
-        int port = 8000;
-        String adress = "127.0.0.1";
+        int port;
+        String adress;
         String mensaje;
         DataInputStream dis;
         DataOutputStream dos;
@@ -14,8 +14,12 @@ public class Cliente {
         boolean juego;
 
         try {
-            Socket client = new Socket(adress, port);
             input = new Scanner(System.in);
+            System.out.println("Ingresa la dirección a la que te quieres conectar...");
+            adress = input.nextLine();
+            System.out.println("Ingresa el puerto...");
+            port = input.nextInt();
+            Socket client = new Socket(adress, port);
             dis = new DataInputStream(client.getInputStream());
             dos = new DataOutputStream(client.getOutputStream());
             
