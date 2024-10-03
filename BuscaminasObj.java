@@ -1,4 +1,5 @@
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.Date;
 
 public class BuscaminasObj {
     //Atributos
@@ -15,17 +16,24 @@ public class BuscaminasObj {
     private boolean ganar;
     private char[][] tablero;
     private char[][] tableroJug;
+    private long msTiempo;
+    private Date inicio;
+    private Date fin;
     
     //Constructor
     public BuscaminasObj(int dificultad) {
         setDificultad(dificultad);
         setTablero(generarMatrizInicial());
         setTableroJug(generarMatrizInicial());
+        iniciarCronometro();
     }
 
     //Getters y Setters
     public int getColumnaInicial() {
         return columnaInicial;
+    }
+    public long getTiempoms(){
+        return msTiempo;
     }
     public void setColumnaInicial(int columnaInicial) {
         this.columnaInicial = columnaInicial;
@@ -260,4 +268,14 @@ public class BuscaminasObj {
         }
         return matrizCliente;
     }   
+    public void iniciarCronometro(){
+        msTiempo = 0;
+        inicio =  new Date();
+    }
+    public void detenerCronometro(){
+        fin =  new Date();
+        msTiempo = fin.getTime() - inicio.getTime();
+    }
+    
+
 }

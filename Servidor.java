@@ -3,9 +3,12 @@ import java.io.DataOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 
 public class Servidor {
     public static void main(String[] args) {
+        boolean resultado;
         Socket client;
         DataInputStream dis;
         DataOutputStream dos;
@@ -46,10 +49,14 @@ public class Servidor {
                 if(tableroServidor.isGanar()){
                     System.out.println("El jugador ganó");
                     dos.writeUTF("Has ganado! :)");
+                    resultado = true;
                 } else {
                     System.out.println("El jugador perdió");
                     dos.writeUTF("Has perdido! :(");
+                    resultado = false;
                 }
+                tableroServidor.detenerCronometro();
+                guardarRecord(tableroServidor.getTiempoms(), resultado);
                 System.out.println("Jugador desconectado...");
                 dis.close();
                 dos.close();
@@ -59,4 +66,26 @@ public class Servidor {
             e.printStackTrace();
         }
     }
+
+    public static void guardarRecord(long tiempo, boolean resultado) {
+        try (FileWriter fw = new FileWriter("records.txt", true);
+            PrintWriter pw = new PrintWriter(fw)) {
+            String res;
+            long segundos = (tiempo / 1000) % 60;
+            long minutos = (tiempo / (1000 * 60)) % 60;
+            long horas = (tiempo / (1000 * 60 * 60)) % 24;
+            String tiempoFormato = String.format("%02d:%02d:%02d", horas, minutos, segundos);
+            if (resultado == true){
+                res = "Ganó";
+            }else{
+                res = "Perdió";
+            }
+            pw.println("Resultado: " + res + ", Tiempo: " + tiempoFormato);
+            System.out.println("Registro guardado... \nTiempo: " + tiempoFormato);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }
