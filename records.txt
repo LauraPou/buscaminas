@@ -2,5 +2,3 @@ Resultado: Perdi�, Tiempo: 00:00:00
 Resultado: Perdi�, Tiempo: 00:01:22
 Resultado: Perdi�, Tiempo: 00:01:05
 Resultado: Perdi�, Tiempo: 00:00:21
-
-esto es un comentario
