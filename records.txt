@@ -1,4 +1,6 @@
-Resultado: Perdió, Tiempo: 00:00:00
-Resultado: Perdió, Tiempo: 00:01:22
-Resultado: Perdió, Tiempo: 00:01:05
-Resultado: Perdió, Tiempo: 00:00:21
+Resultado: Perdiï¿½, Tiempo: 00:00:00
+Resultado: Perdiï¿½, Tiempo: 00:01:22
+Resultado: Perdiï¿½, Tiempo: 00:01:05
+Resultado: Perdiï¿½, Tiempo: 00:00:21
+
+esto es un comentario
